@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Brand colors from the design → classes like bg-cream, text-ink, border-line */
+@theme {
+  --color-cream: #FAF8F5;  /* page background */
+  --color-sand: #F4EFE8;   /* alternate section background */
+  --color-ink: #2E2A26;    /* main text */
+  --color-muted: #5A5249;  /* secondary text */
+  --color-line: #E8DED3;   /* borders and dividers */
+  --color-clay: #8A5A3B;   /* food accent */
+  --color-sage: #4F5A4C;   /* product accent */
+}
+
+/* Fonts loaded in layout.tsx via next/font → classes font-serif, font-sans */
+@theme inline {
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-karla), system-ui, sans-serif;
+}
