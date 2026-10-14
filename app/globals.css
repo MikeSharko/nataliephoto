@@ -2,17 +2,57 @@
 
 /* Brand colors from the design → classes like bg-cream, text-ink, border-line */
 @theme {
-  --color-cream: #FAF8F5;  /* page background */
-  --color-sand: #F4EFE8;   /* alternate section background */
-  --color-ink: #2E2A26;    /* main text */
-  --color-muted: #5A5249;  /* secondary text */
-  --color-line: #E8DED3;   /* borders and dividers */
-  --color-clay: #8A5A3B;   /* food accent */
-  --color-sage: #4F5A4C;   /* product accent */
+  --color-cream: #FAF8F5;      /* page background */
+  --color-sand: #F4EFE8;       /* alternate section background */
+  --color-paper: #FFFDFA;      /* cards, inputs, dropdowns */
+  --color-ink: #2E2A26;        /* main text */
+  --color-body: #3E3833;       /* long-form article text */
+  --color-muted: #5A5249;      /* secondary text */
+  --color-subtle: #6E655B;     /* small labels and captions */
+  --color-line: #E8DED3;       /* borders and dividers */
+  --color-field: #DDD2C4;      /* form field borders */
+
+  /* One accent per portfolio category */
+  --color-clay: #8A5A3B;       /* food */
+  --color-clay-soft: #F6F0E8;
+  --color-clay-tint: #EEE2D5;
+  --color-sage: #4F5A4C;       /* product */
+  --color-sage-soft: #F1F3EF;
+  --color-sage-tint: #E1E6DF;
+  --color-plum: #6B5468;       /* people */
+  --color-plum-soft: #F3EFF1;
+  --color-plum-tint: #EDE6EA;
 }
 
 /* Fonts loaded in layout.tsx via next/font → classes font-serif, font-sans */
 @theme inline {
   --font-serif: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-karla), system-ui, sans-serif;
+}
+
+/* Side padding of every section: 20px on phones, 40px on tablets, 64px on desktop */
+:root {
+  --gutter: 1.25rem;
+}
+@media (min-width: 768px) {
+  :root {
+    --gutter: 2.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 4rem;
+  }
+}
+
+@utility px-gutter {
+  padding-inline: var(--gutter);
+}
+
+/* Small uppercase label used all over the design (nav, eyebrows, links) */
+@utility eyebrow {
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
