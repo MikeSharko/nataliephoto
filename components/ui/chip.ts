@@ -1,9 +1,11 @@
 import { cn } from "@/lib/cn";
 
-// Shared look for the round filter "pills" (Portfolio categories, Blog categories)
+// Shared look for category filters (Portfolio categories, Blog categories):
+// big condensed text, the active one bright and in [ brackets ], the rest dimmed.
+// Brackets show for aria-current (links) or aria-pressed (filter buttons), see @utility brackets.
 export function chipClass(active: boolean) {
   return cn(
-    "rounded-full px-5 py-3 text-[13px] uppercase tracking-[0.1em] transition-colors",
-    active ? "bg-ink text-cream" : "border border-field hover:border-ink",
+    "brackets font-display text-[18px] tracking-[0.06em] uppercase transition-colors md:text-[20px]",
+    active ? "text-ink" : "text-ink/50 hover:text-ink",
   );
 }

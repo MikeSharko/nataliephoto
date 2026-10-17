@@ -1,27 +1,44 @@
 @import "tailwindcss";
 
-/* Brand colors from the design → classes like bg-cream, text-ink, border-line */
+/* Brand colors → classes like bg-cream, text-ink, border-line.
+   Dark "darkroom" theme: the names stay the same, the values are dark ground + light text.
+   cream = page background, ink = main text (so bg-ink text-cream is a light button). */
 @theme {
-  --color-cream: #FAF8F5;      /* page background */
-  --color-sand: #F4EFE8;       /* alternate section background */
-  --color-paper: #FFFDFA;      /* cards, inputs, dropdowns */
-  --color-ink: #2E2A26;        /* main text */
-  --color-body: #3E3833;       /* long-form article text */
-  --color-muted: #5A5249;      /* secondary text */
-  --color-subtle: #6E655B;     /* small labels and captions */
-  --color-line: #E8DED3;       /* borders and dividers */
-  --color-field: #DDD2C4;      /* form field borders */
+  --color-cream: #1E1E1C;      /* page background (graphite) */
+  --color-sand: #262624;       /* alternate section background */
+  --color-paper: #2B2B28;      /* cards, inputs, dropdowns */
+  --color-ink: #EFE8DE;        /* main text */
+  --color-body: #DDD6CB;       /* long-form article text */
+  --color-muted: #B3AB9F;      /* secondary text */
+  --color-subtle: #8E877D;     /* small labels and captions */
+  --color-line: #383733;       /* borders and dividers */
+  --color-field: #4B4945;      /* form field borders */
+  --color-snow: #FAF8F5;       /* light text over photos (home page hero) */
+  --color-signal: #FF3B30;     /* red "flash ready" accent: numbers, dots */
 
-  /* One accent per portfolio category */
-  --color-clay: #8A5A3B;       /* food */
-  --color-clay-soft: #F6F0E8;
-  --color-clay-tint: #EEE2D5;
-  --color-sage: #4F5A4C;       /* product */
-  --color-sage-soft: #F1F3EF;
-  --color-sage-tint: #E1E6DF;
-  --color-plum: #6B5468;       /* people */
-  --color-plum-soft: #F3EFF1;
-  --color-plum-tint: #EDE6EA;
+  /* One accent per portfolio category, lightened for the dark ground */
+  --color-clay: #D9926A;       /* food */
+  --color-clay-soft: #262624;
+  --color-clay-tint: #3A2F28;
+  --color-sage: #A9B89F;       /* product */
+  --color-sage-soft: #262624;
+  --color-sage-tint: #2D332B;
+  --color-plum: #C2A1BC;       /* people */
+  --color-plum-soft: #262624;
+  --color-plum-tint: #352C33;
+}
+
+/* Dark form controls and scrollbars */
+:root {
+  color-scheme: dark;
+}
+
+/* Headings in the condensed display font are always capitals */
+@layer base {
+  .font-serif,
+  .font-display {
+    text-transform: uppercase;
+  }
 }
 
 /* Red light on the hero photo: dim most of the time, two quick blinks every 5 seconds */
@@ -40,9 +57,74 @@
   }
 }
 
+/* --- Motion -------------------------------------------------------------
+   animate-page-in: every page fades up a little when you open it (app/template.tsx)
+   animate-title-in: the big page title slides up from behind a "curtain"
+   animate-photo-in: each photo in the lightbox fades in */
+@theme {
+  --animate-page-in: page-in 0.6s ease-out both;
+  --animate-title-in: title-in 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
+  --animate-photo-in: photo-in 0.45s ease-out both;
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+  @keyframes title-in {
+    from {
+      translate: 0 105%;
+    }
+  }
+  @keyframes photo-in {
+    from {
+      opacity: 0;
+      scale: 0.985;
+    }
+  }
+}
+
+/* .reveal: fades up while it scrolls into view. Pure CSS (scroll-driven animations);
+   browsers that don't support it simply show the element. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 40px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Lightbox: fade in when it opens, and the page behind it doesn't scroll */
+.lightbox[open] {
+  animation: page-in 0.35s ease-out;
+}
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* "Reduce motion" in the system settings → no animations at all */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Fonts loaded in layout.tsx via next/font → classes font-serif, font-sans */
 @theme inline {
-  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-serif: var(--font-oswald), "Arial Narrow", sans-serif; /* headings (was Cormorant) */
   --font-sans: var(--font-karla), system-ui, sans-serif;
   --font-display: var(--font-oswald), "Arial Narrow", sans-serif; /* condensed, hero links only */
 }
@@ -64,6 +146,40 @@
 
 @utility px-gutter {
   padding-inline: var(--gutter);
+}
+
+/* Square brackets that fade in around a link on hover and stay on the current page:
+   [ PORTFOLIO ]. The space is reserved, so nothing shifts when they appear. */
+@utility brackets {
+  &::before,
+  &::after {
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.3s, translate 0.3s;
+  }
+  &::before {
+    content: "[";
+    margin-right: 0.5em;
+    translate: 0.4em 0;
+  }
+  &::after {
+    content: "]";
+    margin-left: 0.5em;
+    translate: -0.4em 0;
+  }
+  &:hover::before,
+  &:hover::after,
+  &:focus-visible::before,
+  &:focus-visible::after,
+  &[aria-current]::before,
+  &[aria-current]::after,
+  &[data-current]::before,
+  &[data-current]::after,
+  &[aria-pressed="true"]::before,
+  &[aria-pressed="true"]::after {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
 /* Small uppercase label used all over the design (nav, eyebrows, links) */

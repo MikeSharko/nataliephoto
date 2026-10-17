@@ -51,7 +51,8 @@ export default async function CategoryPage({ params }: Props) {
             ]}
           />
         }
-        title={category.headline}
+        title={category.navLabel}
+        subtitle={category.headline}
         description={category.intro}
       >
         <CategoryChips current={category.slug} />

@@ -19,7 +19,8 @@ export default async function BlogPage() {
     <>
       <PageIntro
         eyebrow={<p className="eyebrow text-subtle">Journal</p>}
-        title="Notes on light, food and objects."
+        title="Blog"
+        subtitle="Notes on light, food and objects."
         description="Practical guides for restaurants, cafes and product brands: how to plan a shoot, what to prepare, and how to get the most from your images."
       />
       <BlogIndex posts={posts} />

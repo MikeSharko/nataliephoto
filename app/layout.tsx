@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Karla, Oswald } from "next/font/google";
+import { Karla, Oswald } from "next/font/google";
+import MainFrame from "@/components/layout/MainFrame";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteNav from "@/components/layout/SiteNav";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 // Fonts are downloaded at build time and self-hosted (no requests to Google from the browser)
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
-});
 const karla = Karla({ subsets: ["latin"], variable: "--font-karla" });
-const oswald = Oswald({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-oswald" });
+const oswald = Oswald({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-oswald" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -33,10 +28,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${karla.variable} ${oswald.variable}`}>
+    <html lang="en" className={`${karla.variable} ${oswald.variable}`}>
       <body className="bg-cream text-ink font-sans antialiased">
         <SiteNav />
-        <main>{children}</main>
+        <MainFrame>{children}</MainFrame>
         <SiteFooter />
       </body>
     </html>

@@ -29,10 +29,10 @@ function VerticalLink({ href, label, title, className }: { href: string; label: 
       href={href}
       className={cn("group absolute rotate-180 outline-none will-change-transform [writing-mode:vertical-rl]", className)}
     >
-      <span className="block text-[10px] tracking-[0.22em] whitespace-nowrap text-cream/65 uppercase md:text-[11px]">{label}</span>
+      <span className="block text-[10px] tracking-[0.22em] whitespace-nowrap text-snow/65 uppercase md:text-[11px]">{label}</span>
       <span
         className={cn(
-          "relative block font-display text-[clamp(26px,5.5svh,34px)] leading-[1.05] font-semibold tracking-[0.01em] whitespace-nowrap text-cream/85 uppercase transition-colors group-hover:text-cream group-focus-visible:text-cream md:text-[clamp(30px,6.5svh,56px)]",
+          "relative block font-display text-[clamp(26px,5.5svh,34px)] leading-[1.05] font-semibold tracking-[0.01em] whitespace-nowrap text-snow/85 uppercase transition-colors group-hover:text-snow group-focus-visible:text-snow md:text-[clamp(30px,6.5svh,56px)]",
           brackets,
         )}
       >
@@ -64,7 +64,7 @@ export default async function Hero() {
   const [heroPhoto, darkness, flashLight] = await Promise.all([getHeroPhoto(), getHeroDarkness(), getHeroFlashLight()]);
 
   return (
-    <section className="relative isolate h-svh overflow-hidden bg-ink text-cream [container-type:size]">
+    <section className="relative isolate h-svh overflow-hidden bg-cream text-snow [container-type:size]">
       <div className="absolute inset-0 -z-10">
         <Photo photo={heroPhoto} aspect={false} className="h-full" sizes="100vw" hideLabel preload />
       </div>
@@ -86,8 +86,8 @@ export default async function Hero() {
       <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-40 bg-linear-to-b from-black/45 to-transparent" />
 
       {/* Thin vertical guide lines */}
-      <div aria-hidden="true" className="absolute inset-y-0 left-[34%] w-px bg-cream/12" />
-      <div aria-hidden="true" className="absolute inset-y-0 left-[67%] w-px bg-cream/12" />
+      <div aria-hidden="true" className="absolute inset-y-0 left-[34%] w-px bg-snow/12" />
+      <div aria-hidden="true" className="absolute inset-y-0 left-[67%] w-px bg-snow/12" />
 
       <VerticalLink
         href="/portfolio/"
@@ -103,11 +103,11 @@ export default async function Hero() {
       />
 
       {/* Bottom corners. The small line on the left is the page's h1 for Google. */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-gutter pb-7 text-[11px] tracking-[0.16em] text-cream/65 uppercase">
+      <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-gutter pb-7 text-[11px] tracking-[0.16em] text-snow/65 uppercase">
         <h1>Food, product &amp; people photography · {site.location}</h1>
         <p className="flex flex-wrap gap-x-6 gap-y-2">
           {site.instagram && (
-            <a href={`https://instagram.com/${site.instagram}`} className="transition-colors hover:text-cream">
+            <a href={`https://instagram.com/${site.instagram}`} className="transition-colors hover:text-snow">
               Instagram
             </a>
           )}
@@ -115,11 +115,11 @@ export default async function Hero() {
             © {new Date().getFullYear()}{" "}
             {/* Quiet shortcut to the admin panel for Natalie: looks like plain text.
                 The Studio asks for a login, so it's safe to link publicly. */}
-            <a href={site.studioUrl} rel="nofollow" className="transition-colors hover:text-cream">
+            <a href={site.studioUrl} rel="nofollow" className="transition-colors hover:text-snow">
               {site.name}
             </a>
           </span>
-          <a href={site.developer.url} target="_blank" className="text-cream/45 transition-colors hover:text-cream">
+          <a href={site.developer.url} target="_blank" className="text-snow/45 transition-colors hover:text-snow">
             Developed by {site.developer.name}
           </a>
         </p>

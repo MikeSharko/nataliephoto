@@ -45,7 +45,7 @@ export default function BlogIndex({ posts }: { posts: PostSummary[] }) {
         </section>
       )}
 
-      <section className="bg-sand px-gutter py-20 md:py-24">
+      <section className="border-t border-line px-gutter py-20 md:py-24">
         <h2 className="mb-11 font-serif text-[36px] font-light md:text-[44px]">
           {active === "all" ? "Latest articles" : postCategories.find((c) => c.slug === active)?.label}
         </h2>

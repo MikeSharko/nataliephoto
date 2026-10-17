@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="bg-sand px-gutter py-20 md:py-28">
+    <section id="contact" className="border-t border-line px-gutter py-20 md:py-28">
       <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-18">
         <div>
           <h2 className="mb-5 font-serif text-[38px] leading-[1.15] font-light md:text-[48px]">

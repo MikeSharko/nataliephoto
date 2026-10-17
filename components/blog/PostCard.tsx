@@ -14,7 +14,7 @@ export default function PostCard({ post, compact = false }: Props) {
   const category = getPostCategory(post.category);
 
   return (
-    <Link href={`/blog/${post.slug}/`} className="group block">
+    <Link href={`/blog/${post.slug}/`} className="reveal group block">
       <Photo
         photo={post.cover}
         aspect="3 / 2"

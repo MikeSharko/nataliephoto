@@ -16,7 +16,8 @@ export default function PricesPage() {
     <>
       <PageIntro
         eyebrow={<p className="eyebrow text-subtle">Prices</p>}
-        title="Prices & packages."
+        title="Prices"
+        subtitle="Packages for food, product and people shoots."
         description="Every shoot is a little different. Pick the closest package and I will tailor it to your project."
       />
       <Pricing />

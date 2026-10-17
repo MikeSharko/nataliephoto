@@ -1,6 +1,5 @@
-import Photo from "@/components/ui/Photo";
+import Lightbox from "@/components/portfolio/Lightbox";
 import { accents } from "@/lib/accents";
-import { cn } from "@/lib/cn";
 import { getCategory, type Photo as PhotoData } from "@/lib/portfolio";
 
 type Props = {
@@ -8,25 +7,17 @@ type Props = {
   showCategory?: boolean; // small colored label under each photo (Portfolio page)
 };
 
-// Pinterest-style columns: each photo keeps its own proportions
+// Pinterest-style columns: each photo keeps its own proportions.
+// Prepares the labels here on the server, the grid + full-screen viewer live in <Lightbox>.
 export default function MasonryGallery({ photos, showCategory = false }: Props) {
-  return (
-    <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
-      {photos.map((photo, index) => {
-        const category = getCategory(photo.category);
-        return (
-          <figure key={`${photo.category}-${index}`} className="mb-6 break-inside-avoid">
-            <Photo photo={photo} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
-            {showCategory && category && (
-              <figcaption
-                className={cn("mt-2.5 text-xs uppercase tracking-[0.14em]", accents[category.accent].text)}
-              >
-                {category.navLabel}
-              </figcaption>
-            )}
-          </figure>
-        );
-      })}
-    </div>
-  );
+  const items = photos.map((photo) => {
+    const category = getCategory(photo.category);
+    return {
+      photo,
+      label: showCategory ? category?.navLabel : undefined,
+      labelClass: category ? accents[category.accent].text : undefined,
+    };
+  });
+
+  return <Lightbox items={items} />;
 }

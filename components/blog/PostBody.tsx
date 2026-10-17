@@ -10,7 +10,7 @@ const components: PortableTextComponents = {
       <h2 className="mt-14 mb-4 font-serif text-[30px] leading-[1.2] text-ink md:text-[34px]">{children}</h2>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-14 border-y border-line py-8 text-center font-serif text-[28px] leading-[1.35] font-light text-ink italic md:text-[32px]">
+      <blockquote className="my-14 border-y border-line py-8 text-center font-display text-[28px] leading-[1.25] font-medium text-ink md:text-[34px]">
         {children}
       </blockquote>
     ),

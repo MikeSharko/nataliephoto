@@ -11,7 +11,7 @@ export default function SiteFooter() {
 
   return (
     <footer className="border-t border-line">
-      <div className="flex flex-wrap justify-between gap-6 px-gutter py-10 text-[13px] text-muted">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-gutter py-8 text-[11px] tracking-[0.16em] text-subtle uppercase">
         <p>
           © {new Date().getFullYear()} {site.name}
         </p>

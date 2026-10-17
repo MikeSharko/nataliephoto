@@ -91,7 +91,7 @@ export default async function PostPage({ params }: Props) {
 
       {/* Hidden while this is the only post */}
       {related.length > 0 && (
-        <section className="bg-sand px-gutter py-20 md:py-24">
+        <section className="border-t border-line px-gutter py-20 md:py-24">
           <h2 className="mb-11 font-serif text-[36px] font-light md:text-[44px]">More from the journal</h2>
           <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((item) => (

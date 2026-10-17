@@ -8,7 +8,7 @@ export default function Pricing() {
         {packages.map((pkg) => (
           <div
             key={pkg.name}
-            className={cn("bg-paper p-8 md:p-9", pkg.featured ? "border border-ink" : "border border-line")}
+            className={cn("reveal bg-paper p-8 md:p-9", pkg.featured ? "border border-ink" : "border border-line")}
           >
             <h3 className="mb-2 font-serif text-[28px]">{pkg.name}</h3>
             <p className="mb-6 text-[26px] font-light">{pkg.price}</p>

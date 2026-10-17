@@ -67,37 +67,34 @@ export default function SiteNav() {
   const inBlog = pathname.startsWith("/blog");
   const inPrices = pathname.startsWith("/prices");
 
-  // On the home page the menu floats over the dark full-screen photo: light text, no background
+  // On the home page the menu floats over the full-screen photo: light text, no background
   const overPhoto = pathname === "/";
-  const hover = overPhoto ? "hover:text-cream/70" : "hover:text-clay";
-  const underline = overPhoto ? "border-cream" : "border-ink";
+  // Links get [ brackets ] on hover and on the current page
+  const linkClass = "brackets transition-colors";
 
   return (
     <header
       className={cn(
         "border-b",
-        overPhoto ? "absolute inset-x-0 top-0 z-30 border-cream/15 text-cream" : "border-line",
-        overPhoto && mobileOpen && "bg-ink",
+        overPhoto ? "absolute inset-x-0 top-0 z-30 border-snow/15 text-snow" : "border-line",
+        overPhoto && mobileOpen && "bg-cream",
       )}
     >
-      <nav aria-label="Main" className="flex items-center justify-between gap-6 px-gutter py-6 md:py-7">
+      <nav aria-label="Main" className="flex items-center justify-between gap-6 px-gutter py-6 md:py-7 mx-auto max-w-[1200px]">
         <Link href="/" onClick={closeMenus} className="transition-opacity hover:opacity-80">
           <Logo />
         </Link>
 
         {/* Desktop menu */}
-        <ul className="eyebrow hidden items-center gap-8 md:flex">
+        <ul className="eyebrow hidden items-center gap-3 md:flex">
           <li ref={dropdownRef} className="relative">
             <button
               type="button"
               aria-expanded={portfolioOpen}
               aria-controls="portfolio-menu"
               onClick={() => setPortfolioOpen((open) => !open)}
-              className={cn(
-                "flex cursor-pointer items-center gap-1.5 border-b pb-0.5 uppercase transition-colors",
-                hover,
-                inPortfolio ? underline : "border-transparent",
-              )}
+              data-current={inPortfolio || undefined}
+              className={cn("flex cursor-pointer items-center gap-1.5 uppercase", linkClass)}
             >
               Portfolio <Chevron open={portfolioOpen} />
             </button>
@@ -129,7 +126,7 @@ export default function SiteNav() {
             <Link
               href="/prices/"
               aria-current={inPrices ? "page" : undefined}
-              className={cn("border-b pb-0.5 transition-colors", hover, inPrices ? underline : "border-transparent")}
+              className={linkClass}
             >
               Prices
             </Link>
@@ -138,7 +135,7 @@ export default function SiteNav() {
             <Link
               href="/blog/"
               aria-current={inBlog ? "page" : undefined}
-              className={cn("border-b pb-0.5 transition-colors", hover, inBlog ? underline : "border-transparent")}
+              className={linkClass}
             >
               Blog
             </Link>
@@ -149,7 +146,7 @@ export default function SiteNav() {
               aria-current={pathname.startsWith("/contact") ? "page" : undefined}
               className={cn(
                 "rounded-full border px-5.5 py-3 transition-colors",
-                overPhoto ? "border-cream/70 hover:bg-cream hover:text-ink" : "border-ink hover:bg-ink hover:text-cream",
+                overPhoto ? "border-snow/70 hover:bg-snow hover:text-cream" : "border-ink hover:bg-ink hover:text-cream",
               )}
             >
               Get in touch
@@ -165,7 +162,7 @@ export default function SiteNav() {
           onClick={() => setMobileOpen((open) => !open)}
           className={cn(
             "eyebrow cursor-pointer rounded-full border px-5 py-2.5 uppercase md:hidden",
-            overPhoto ? "border-cream/70" : "border-ink",
+            overPhoto ? "border-snow/70" : "border-ink",
           )}
         >
           {mobileOpen ? "Close" : "Menu"}
@@ -176,9 +173,9 @@ export default function SiteNav() {
       {mobileOpen && (
         <div
           id="mobile-menu"
-          className={cn("border-t px-gutter pt-2 pb-8 md:hidden", overPhoto ? "border-cream/15" : "border-line")}
+          className={cn("border-t px-gutter pt-2 pb-8 md:hidden", overPhoto ? "border-snow/15" : "border-line")}
         >
-          <p className={cn("eyebrow pt-4 pb-2", overPhoto ? "text-cream/60" : "text-subtle")}>Portfolio</p>
+          <p className={cn("eyebrow pt-4 pb-2", overPhoto ? "text-snow/60" : "text-subtle")}>Portfolio</p>
           <ul className="font-serif text-[28px] leading-snug">
             {portfolioLinks.map((link) => (
               <li key={link.href}>
@@ -193,7 +190,7 @@ export default function SiteNav() {
               </li>
             ))}
           </ul>
-          <ul className={cn("eyebrow mt-6 grid gap-4 border-t pt-6", overPhoto ? "border-cream/15" : "border-line")}>
+          <ul className={cn("eyebrow mt-6 grid gap-4 border-t pt-6", overPhoto ? "border-snow/15" : "border-line")}>
             <li>
               <Link href="/prices/" onClick={closeMenus}>
                 Prices
