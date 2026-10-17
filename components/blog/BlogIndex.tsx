@@ -4,7 +4,7 @@ import { useState } from "react";
 import FeaturedPost from "@/components/blog/FeaturedPost";
 import PostCard from "@/components/blog/PostCard";
 import { chipClass } from "@/components/ui/chip";
-import { postCategories, type PostCategorySlug, type PostSummary } from "@/lib/posts";
+import { postCategories, type PostCategorySlug, type PostSummary } from "@/lib/blog";
 
 // All posts are in the HTML from the start (good for Google);
 // the filter only hides the ones that don't match.

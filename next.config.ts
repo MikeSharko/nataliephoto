@@ -1,11 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: "export",              // npm run build → static HTML in out/
-  trailingSlash: true,           // /food → out/food/index.html
-  images: { unoptimized: true }, // no image optimization server on S3
-  
+  output: "export", // npm run build → static HTML in out/
+  trailingSlash: true, // /blog → out/blog/index.html
+
+  // No image server on S3: next/image asks Sanity's image CDN for each size instead
+  images: {
+    loader: "custom",
+    loaderFile: "./lib/sanity-image-loader.ts",
+  },
+
+  // Tailwind CSS v4 via Turbopack (added by create-next-app)
   turbopack: {
     rules: {
       "*.css": {

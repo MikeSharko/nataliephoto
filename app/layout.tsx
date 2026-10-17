@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Karla } from "next/font/google";
+import { Cormorant_Garamond, Karla, Oswald } from "next/font/google";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteNav from "@/components/layout/SiteNav";
 import { site } from "@/lib/site";
@@ -13,6 +13,7 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 });
 const karla = Karla({ subsets: ["latin"], variable: "--font-karla" });
+const oswald = Oswald({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-oswald" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -32,7 +33,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${karla.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${karla.variable} ${oswald.variable}`}>
       <body className="bg-cream text-ink font-sans antialiased">
         <SiteNav />
         <main>{children}</main>

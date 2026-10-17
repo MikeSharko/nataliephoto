@@ -8,7 +8,7 @@ import CtaSection from "@/components/sections/CtaSection";
 import PageIntro from "@/components/sections/PageIntro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { accents } from "@/lib/accents";
-import { categories, getCategory } from "@/lib/portfolio";
+import { categories, getCategory, getCategoryPhotos } from "@/lib/portfolio";
 
 type Props = { params: Promise<{ category: string }> };
 
@@ -38,6 +38,8 @@ export default async function CategoryPage({ params }: Props) {
   const category = getCategory(slug);
   if (!category) notFound();
 
+  const photos = await getCategoryPhotos(category.slug);
+
   return (
     <>
       <PageIntro
@@ -57,9 +59,9 @@ export default async function CategoryPage({ params }: Props) {
 
       <section className="px-gutter pb-24 md:pb-28">
         {category.layout === "masonry" ? (
-          <MasonryGallery photos={category.photos} />
+          <MasonryGallery photos={photos} />
         ) : (
-          <GridGallery photos={category.photos} />
+          <GridGallery photos={photos} />
         )}
       </section>
 

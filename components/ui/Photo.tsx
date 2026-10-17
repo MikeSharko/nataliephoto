@@ -17,23 +17,35 @@ type Props = {
   sizes?: string;
   className?: string;
   hideLabel?: boolean; // for tiny placeholders like avatars
+  preload?: boolean; // load right away: only for the first big photo on the page
 };
 
 // Renders a real image when `photo.src` is set, otherwise a labelled placeholder box
-export default function Photo({ photo, aspect, sizes = "100vw", className, hideLabel = false }: Props) {
+export default function Photo({ photo, aspect, sizes = "100vw", className, hideLabel = false, preload = false }: Props) {
   const ratio = aspect === false ? undefined : (aspect ?? `${photo.width} / ${photo.height}`);
 
   return (
     <div
       className={cn(
         "relative overflow-hidden",
-        !photo.src && placeholderTone[photo.category],
+        photo.src ? "bg-sand" : placeholderTone[photo.category],
         className,
       )}
       style={ratio ? { aspectRatio: ratio } : undefined}
     >
       {photo.src ? (
-        <Image src={photo.src} alt={photo.alt} fill sizes={sizes} className="object-cover" />
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          fill
+          sizes={sizes}
+          preload={preload}
+          className="object-cover"
+          // Keep the focus point from Sanity in view when the photo is cropped
+          style={photo.focus ? { objectPosition: `${photo.focus.x * 100}% ${photo.focus.y * 100}%` } : undefined}
+          placeholder={photo.blurDataURL ? "blur" : "empty"}
+          blurDataURL={photo.blurDataURL}
+        />
       ) : (
         !hideLabel && (
           <span className="absolute inset-0 grid place-items-center p-4 text-center text-xs uppercase tracking-[0.14em]">

@@ -1,16 +1,21 @@
-// Portfolio data. In video 2 this file's functions will read from Sanity instead,
-// and the pages that use them won't need to change.
+// Portfolio data. Texts for each category live here in code;
+// the photos come from Sanity (galleries in the Studio). While a gallery is empty,
+// the site shows labelled placeholder boxes instead.
 
+import { cache } from "react";
 import type { Accent } from "@/lib/accents";
+import { client, imageFields, toPhoto, type SanityImage } from "@/lib/sanity";
 
 export type CategorySlug = "food" | "product" | "people";
 
 export type Photo = {
-  src?: string; // e.g. "/photos/food/01.jpg" in public/; no src = placeholder box
+  src?: string; // image URL; no src = placeholder box
   alt: string;
   width: number;
   height: number;
   category: CategorySlug;
+  focus?: { x: number; y: number }; // focus point chosen in Sanity (0–1), keeps it visible when cropped
+  blurDataURL?: string; // tiny blurred preview shown while the photo loads
 };
 
 export type Category = {
@@ -22,10 +27,10 @@ export type Category = {
   intro: string;
   metaDescription: string;
   layout: "masonry" | "grid";
-  card: { description: string; linkLabel: string; cover: Photo };
+  card: { description: string; linkLabel: string };
   services: { title: string; text: string }[];
   cta: { title: string; text: string };
-  photos: Photo[];
+  placeholders: Photo[]; // shown until the gallery in Sanity has photos
 };
 
 // Shortcut for placeholder photos: same width, different heights for the masonry rhythm
@@ -52,7 +57,6 @@ export const categories: Category[] = [
     card: {
       description: "Menus, restaurant and cafe content, recipe and cookbook shoots, styling for social.",
       linkLabel: "View food work",
-      cover: photo("food", "Food work", 1450),
     },
     services: [
       { title: "Menu photography", text: "Full menu shot in a day, consistent light and angles across every dish." },
@@ -66,7 +70,7 @@ export const categories: Category[] = [
       title: "Have a menu to shoot?",
       text: "Send over the dishes, your dates and roughly what you need the images for.",
     },
-    photos: [
+    placeholders: [
       photo("food", "Plated dish", 1680),
       photo("food", "Table scene", 960),
       photo("food", "Drinks", 1240),
@@ -89,11 +93,10 @@ export const categories: Category[] = [
       "Clean surfaces, considered shadow and images that hold up next to the packaging itself.",
     metaDescription:
       "Product and still life photography in San Diego: e-commerce packshots, skincare and cosmetics, flat lays and creative still life.",
-    layout: "grid",
+    layout: "masonry", // whole photos, never cropped
     card: {
       description: "Skincare and cosmetics, accessories, e-commerce packshots, creative still life.",
       linkLabel: "View product work",
-      cover: photo("product", "Product work", 1450),
     },
     services: [
       { title: "E-commerce packshots", text: "Clean images on white, consistent across a whole range, sized for any storefront." },
@@ -107,7 +110,7 @@ export const categories: Category[] = [
       title: "Launching something?",
       text: "Tell me how many products, where the images will live, and when you need them.",
     },
-    photos: [
+    placeholders: [
       photo("product", "Serum bottle"),
       photo("product", "Packshot on white"),
       photo("product", "Cream jar in hard light"),
@@ -130,11 +133,10 @@ export const categories: Category[] = [
       "Relaxed direction and natural light, for portraits that feel like the person rather than a stock photo.",
     metaDescription:
       "Portrait and brand photography in San Diego: brand portraits, headshots, chefs and restaurant teams, founders and makers.",
-    layout: "grid",
+    layout: "masonry", // whole photos, never cropped
     card: {
       description: "Brand portraits, headshots, chefs and teams, founders and makers at work.",
       linkLabel: "View people work",
-      cover: photo("people", "People work", 1450),
     },
     services: [
       { title: "Brand portraits", text: "Portraits for your website, press and social, in your space or on location." },
@@ -148,7 +150,7 @@ export const categories: Category[] = [
       title: "Need new portraits?",
       text: "Tell me who we are photographing, where the images will be used, and when you need them.",
     },
-    photos: [
+    placeholders: [
       photo("people", "Brand portrait", 1500),
       photo("people", "Chef at work", 1500),
       photo("people", "Headshot", 1500),
@@ -163,23 +165,95 @@ export function getCategory(slug: string) {
   return categories.find((category) => category.slug === slug);
 }
 
-// All photos mixed together for the Portfolio page: food, product, people, food, ...
-export function getAllPhotos(): Photo[] {
-  const longest = Math.max(...categories.map((category) => category.photos.length));
+// --- Photos from Sanity ---------------------------------------------------
+
+type GalleryResult = { _id: string; images: SanityImage[] | null };
+
+// All three galleries in one request. cache() means one request per page,
+// even when several components on the page ask for photos.
+const getGalleries = cache(async () => {
+  const result = await client.fetch<GalleryResult[]>(
+    `*[_type == "gallery"]{ _id, "images": images[defined(asset)]{ ${imageFields} } }`,
+  );
+
+  const photos: Record<CategorySlug, Photo[]> = { food: [], product: [], people: [] };
+  for (const gallery of result) {
+    const slug = gallery._id.replace("gallery-", "") as CategorySlug; // "gallery-food" → "food"
+    if (!(slug in photos)) continue;
+    photos[slug] = (gallery.images ?? [])
+      .map((image) => toPhoto(image, slug))
+      .filter((item): item is Photo => item !== undefined);
+  }
+  return photos;
+});
+
+// Photos of one category, in the order Natalie set in the Studio
+export async function getCategoryPhotos(slug: CategorySlug): Promise<Photo[]> {
+  const galleries = await getGalleries();
+  if (galleries[slug].length > 0) return galleries[slug];
+  return getCategory(slug)?.placeholders ?? [];
+}
+
+// First photo of each gallery: used for the category cards on the home page
+export async function getCoverPhoto(slug: CategorySlug): Promise<Photo> {
+  const [first] = await getCategoryPhotos(slug);
+  return first;
+}
+
+// Mixes lists together: food, product, people, food, product, ...
+function interleave(lists: Photo[][]): Photo[] {
+  const longest = Math.max(0, ...lists.map((list) => list.length));
   const mixed: Photo[] = [];
   for (let i = 0; i < longest; i++) {
-    for (const category of categories) {
-      const item = category.photos[i];
-      if (item) mixed.push(item);
+    for (const list of lists) {
+      if (list[i]) mixed.push(list[i]);
     }
   }
   return mixed;
 }
 
-// Hand-picked images for the "Selected work" strip on the home page
-export function getSelectedWork(): Photo[] {
-  return getAllPhotos().slice(0, 6);
+// All categories mixed together for the Portfolio page
+export async function getAllPhotos(): Promise<Photo[]> {
+  const lists = await Promise.all(categories.map((category) => getCategoryPhotos(category.slug)));
+  return interleave(lists);
 }
 
-export const heroPhoto = photo("food", "Overhead table scene", 1050, 2400);
-export const portraitPhoto = photo("people", "Portrait of Natalie", 1600);
+// "Selected work" on the home page: the next photos after each gallery's cover,
+// so the same photo doesn't appear twice on the page
+export async function getSelectedWork(): Promise<Photo[]> {
+  const lists = await Promise.all(categories.map((category) => getCategoryPhotos(category.slug)));
+  const withoutCovers = interleave(lists.map((list) => list.slice(1)));
+  return (withoutCovers.length > 0 ? withoutCovers : interleave(lists)).slice(0, 6);
+}
+
+// --- Home page photos (Studio → Home page) ----------------------------------
+
+const heroPlaceholder = photo("food", "Overhead table scene", 1050, 2400);
+const portraitPlaceholder = photo("people", "Portrait of Natalie", 1600);
+
+const getHome = cache(async () =>
+  client.fetch<{ hero: SanityImage | null; heroDarkness: number | null; portrait: SanityImage | null } | null>(
+    `*[_id == "home"][0]{
+      "hero": heroImage{ ${imageFields} },
+      heroDarkness,
+      "portrait": portrait{ ${imageFields} }
+    }`,
+  ),
+);
+
+// Hero photo from the Studio; until it's set, the first Food photo or a placeholder
+export async function getHeroPhoto(): Promise<Photo> {
+  const home = await getHome();
+  return toPhoto(home?.hero, "food") ?? (await getGalleries()).food[0] ?? heroPlaceholder;
+}
+
+// How much the dark layer covers the hero photo, 0–90 (%). Default 40 until set in the Studio.
+export async function getHeroDarkness(): Promise<number> {
+  const home = await getHome();
+  return Math.min(90, Math.max(0, home?.heroDarkness ?? 40));
+}
+
+export async function getPortraitPhoto(): Promise<Photo> {
+  const home = await getHome();
+  return toPhoto(home?.portrait, "people") ?? portraitPlaceholder;
+}

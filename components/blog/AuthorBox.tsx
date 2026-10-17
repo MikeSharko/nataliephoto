@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Photo from "@/components/ui/Photo";
-import { portraitPhoto } from "@/lib/portfolio";
+import { getPortraitPhoto } from "@/lib/portfolio";
 import { site } from "@/lib/site";
 
-export default function AuthorBox() {
+export default async function AuthorBox() {
+  const portraitPhoto = await getPortraitPhoto();
+
   return (
     <section aria-label="About the author" className="mt-10 flex flex-wrap items-center gap-7 border-t border-line pt-10">
       <Photo photo={portraitPhoto} aspect="1 / 1" sizes="96px" className="w-24 shrink-0 rounded-full" hideLabel />
@@ -15,7 +17,7 @@ export default function AuthorBox() {
           Food, product and portrait photographer in San Diego, working with restaurants and brands across
           California.
         </p>
-        <Link href="/#contact" className="eyebrow border-b border-ink pb-1 transition-colors hover:text-clay">
+        <Link href="/contact/" className="eyebrow border-b border-ink pb-1 transition-colors hover:text-clay">
           Work with me
         </Link>
       </div>

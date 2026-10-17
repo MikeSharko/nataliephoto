@@ -1,14 +1,19 @@
+"use client"; // needs the current URL to hide itself on the home page
+
+import { usePathname } from "next/navigation";
 import { site } from "@/lib/site";
 
 export default function SiteFooter() {
-  // Calculated at build time; the next deploy updates it
-  const year = new Date().getFullYear();
+  const pathname = usePathname();
+
+  // The home page is a single full-screen photo with its own copyright line
+  if (pathname === "/") return null;
 
   return (
     <footer className="border-t border-line">
       <div className="flex flex-wrap justify-between gap-6 px-gutter py-10 text-[13px] text-muted">
         <p>
-          © {year} {site.name}
+          © {new Date().getFullYear()} {site.name}
         </p>
         <p>{site.location}</p>
       </div>

@@ -1,0 +1,25 @@
+{
+  "name": "nataliephoto-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanity Studio: the admin panel where Natalie uploads photos and writes posts",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "^6.19.0",
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
+    "sanity": "^6.19.0",
+    "styled-components": "^6.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

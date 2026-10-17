@@ -28,6 +28,7 @@
 @theme inline {
   --font-serif: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-karla), system-ui, sans-serif;
+  --font-display: var(--font-oswald), "Arial Narrow", sans-serif; /* condensed, hero links only */
 }
 
 /* Side padding of every section: 20px on phones, 40px on tablets, 64px on desktop */

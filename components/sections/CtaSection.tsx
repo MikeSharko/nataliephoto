@@ -15,7 +15,7 @@ export default function CtaSection({ title, text, tone = "cream" }: Props) {
         {title}
       </h2>
       <p className="mx-auto mb-9 max-w-[480px] leading-[1.8] text-muted">{text}</p>
-      <ButtonLink href="/#contact">Start an enquiry</ButtonLink>
+      <ButtonLink href="/contact/">Start an enquiry</ButtonLink>
     </section>
   );
 }

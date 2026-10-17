@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BlogIndex from "@/components/blog/BlogIndex";
 import CtaSection from "@/components/sections/CtaSection";
 import PageIntro from "@/components/sections/PageIntro";
-import { posts, toSummary } from "@/lib/posts";
+import { getPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 };
 
 // /blog/ → list of all articles
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getPosts();
+
   return (
     <>
       <PageIntro
@@ -20,7 +22,7 @@ export default function BlogPage() {
         title="Notes on light, food and objects."
         description="Practical guides for restaurants, cafes and product brands: how to plan a shoot, what to prepare, and how to get the most from your images."
       />
-      <BlogIndex posts={posts.map(toSummary)} />
+      <BlogIndex posts={posts} />
       <CtaSection
         title="Planning a shoot?"
         text="Tell me what you are working on and I will suggest how to approach it."

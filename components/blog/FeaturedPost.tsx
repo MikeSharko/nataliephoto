@@ -3,7 +3,7 @@ import PostMeta from "@/components/blog/PostMeta";
 import Photo from "@/components/ui/Photo";
 import { accents } from "@/lib/accents";
 import { cn } from "@/lib/cn";
-import { getPostCategory, type PostSummary } from "@/lib/posts";
+import { getPostCategory, type PostSummary } from "@/lib/blog";
 
 // Large image + text card for the featured article at the top of the blog
 export default function FeaturedPost({ post }: { post: PostSummary }) {

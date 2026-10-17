@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# Studio build output (`sanity build`)
+/dist
+
+# Sanity local cache
+/.sanity
+
+# TypeScript
+*.tsbuildinfo

@@ -3,8 +3,7 @@ import { packages } from "@/lib/pricing";
 
 export default function Pricing() {
   return (
-    <section id="prices" className="px-gutter py-20 md:py-28">
-      <h2 className="mb-12 font-serif text-[36px] font-light md:text-[44px]">Prices &amp; packages</h2>
+    <section aria-label="Packages" className="px-gutter pb-20 md:pb-28">
       <div className="grid gap-6 md:grid-cols-3">
         {packages.map((pkg) => (
           <div

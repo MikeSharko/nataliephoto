@@ -65,11 +65,23 @@ export default function SiteNav() {
 
   const inPortfolio = pathname.startsWith("/portfolio");
   const inBlog = pathname.startsWith("/blog");
+  const inPrices = pathname.startsWith("/prices");
+
+  // On the home page the menu floats over the dark full-screen photo: light text, no background
+  const overPhoto = pathname === "/";
+  const hover = overPhoto ? "hover:text-cream/70" : "hover:text-clay";
+  const underline = overPhoto ? "border-cream" : "border-ink";
 
   return (
-    <header className="border-b border-line">
+    <header
+      className={cn(
+        "border-b",
+        overPhoto ? "absolute inset-x-0 top-0 z-30 border-cream/15 text-cream" : "border-line",
+        overPhoto && mobileOpen && "bg-ink",
+      )}
+    >
       <nav aria-label="Main" className="flex items-center justify-between gap-6 px-gutter py-6 md:py-7">
-        <Link href="/" onClick={closeMenus} className="font-serif text-[26px] tracking-[0.04em]">
+        <Link href="/" onClick={closeMenus} className="font-serif text-[26px] tracking-[0.04em] uppercase">
           {site.name}
         </Link>
 
@@ -82,8 +94,9 @@ export default function SiteNav() {
               aria-controls="portfolio-menu"
               onClick={() => setPortfolioOpen((open) => !open)}
               className={cn(
-                "flex cursor-pointer items-center gap-1.5 border-b pb-0.5 uppercase transition-colors hover:text-clay",
-                inPortfolio ? "border-ink" : "border-transparent",
+                "flex cursor-pointer items-center gap-1.5 border-b pb-0.5 uppercase transition-colors",
+                hover,
+                inPortfolio ? underline : "border-transparent",
               )}
             >
               Portfolio <Chevron open={portfolioOpen} />
@@ -92,7 +105,7 @@ export default function SiteNav() {
             {portfolioOpen && (
               <ul
                 id="portfolio-menu"
-                className="absolute top-[calc(100%+16px)] -left-5.5 z-20 grid min-w-56 border border-line bg-paper py-2.5 shadow-[0_16px_40px_rgba(46,42,38,0.08)]"
+                className="absolute top-[calc(100%+16px)] -left-5.5 z-20 grid min-w-56 border border-line bg-paper py-2.5 text-ink shadow-[0_16px_40px_rgba(46,42,38,0.08)]"
               >
                 {portfolioLinks.map((link) => {
                   const current = pathname === link.href;
@@ -113,7 +126,11 @@ export default function SiteNav() {
             )}
           </li>
           <li>
-            <Link href="/#prices" className="transition-colors hover:text-clay">
+            <Link
+              href="/prices/"
+              aria-current={inPrices ? "page" : undefined}
+              className={cn("border-b pb-0.5 transition-colors", hover, inPrices ? underline : "border-transparent")}
+            >
               Prices
             </Link>
           </li>
@@ -121,18 +138,19 @@ export default function SiteNav() {
             <Link
               href="/blog/"
               aria-current={inBlog ? "page" : undefined}
-              className={cn(
-                "border-b pb-0.5 transition-colors hover:text-clay",
-                inBlog ? "border-ink" : "border-transparent",
-              )}
+              className={cn("border-b pb-0.5 transition-colors", hover, inBlog ? underline : "border-transparent")}
             >
               Blog
             </Link>
           </li>
           <li>
             <Link
-              href="/#contact"
-              className="rounded-full border border-ink px-5.5 py-3 transition-colors hover:bg-ink hover:text-cream"
+              href="/contact/"
+              aria-current={pathname.startsWith("/contact") ? "page" : undefined}
+              className={cn(
+                "rounded-full border px-5.5 py-3 transition-colors",
+                overPhoto ? "border-cream/70 hover:bg-cream hover:text-ink" : "border-ink hover:bg-ink hover:text-cream",
+              )}
             >
               Get in touch
             </Link>
@@ -145,7 +163,10 @@ export default function SiteNav() {
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
           onClick={() => setMobileOpen((open) => !open)}
-          className="eyebrow cursor-pointer rounded-full border border-ink px-5 py-2.5 uppercase md:hidden"
+          className={cn(
+            "eyebrow cursor-pointer rounded-full border px-5 py-2.5 uppercase md:hidden",
+            overPhoto ? "border-cream/70" : "border-ink",
+          )}
         >
           {mobileOpen ? "Close" : "Menu"}
         </button>
@@ -153,8 +174,11 @@ export default function SiteNav() {
 
       {/* Phone menu panel */}
       {mobileOpen && (
-        <div id="mobile-menu" className="border-t border-line px-gutter pt-2 pb-8 md:hidden">
-          <p className="eyebrow pt-4 pb-2 text-subtle">Portfolio</p>
+        <div
+          id="mobile-menu"
+          className={cn("border-t px-gutter pt-2 pb-8 md:hidden", overPhoto ? "border-cream/15" : "border-line")}
+        >
+          <p className={cn("eyebrow pt-4 pb-2", overPhoto ? "text-cream/60" : "text-subtle")}>Portfolio</p>
           <ul className="font-serif text-[28px] leading-snug">
             {portfolioLinks.map((link) => (
               <li key={link.href}>
@@ -169,9 +193,9 @@ export default function SiteNav() {
               </li>
             ))}
           </ul>
-          <ul className="eyebrow mt-6 grid gap-4 border-t border-line pt-6">
+          <ul className={cn("eyebrow mt-6 grid gap-4 border-t pt-6", overPhoto ? "border-cream/15" : "border-line")}>
             <li>
-              <Link href="/#prices" onClick={closeMenus}>
+              <Link href="/prices/" onClick={closeMenus}>
                 Prices
               </Link>
             </li>
@@ -181,7 +205,7 @@ export default function SiteNav() {
               </Link>
             </li>
             <li>
-              <Link href="/#contact" onClick={closeMenus}>
+              <Link href="/contact/" onClick={closeMenus}>
                 Get in touch
               </Link>
             </li>

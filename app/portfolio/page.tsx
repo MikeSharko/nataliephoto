@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 };
 
 // /portfolio/ → all categories mixed together
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const photos = await getAllPhotos();
+
   return (
     <>
       <PageIntro
@@ -23,7 +25,7 @@ export default function PortfolioPage() {
       </PageIntro>
 
       <section className="px-gutter pb-24 md:pb-28">
-        <MasonryGallery photos={getAllPhotos()} showCategory />
+        <MasonryGallery photos={photos} showCategory />
       </section>
 
       <CtaSection
