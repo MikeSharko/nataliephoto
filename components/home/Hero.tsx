@@ -105,15 +105,23 @@ export default async function Hero() {
       {/* Bottom corners. The small line on the left is the page's h1 for Google. */}
       <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-gutter pb-7 text-[11px] tracking-[0.16em] text-cream/65 uppercase">
         <h1>Food, product &amp; people photography · {site.location}</h1>
-        <p className="flex gap-6">
+        <p className="flex flex-wrap gap-x-6 gap-y-2">
           {site.instagram && (
             <a href={`https://instagram.com/${site.instagram}`} className="transition-colors hover:text-cream">
               Instagram
             </a>
           )}
           <span>
-            © {new Date().getFullYear()} {site.name}
+            © {new Date().getFullYear()}{" "}
+            {/* Quiet shortcut to the admin panel for Natalie: looks like plain text.
+                The Studio asks for a login, so it's safe to link publicly. */}
+            <a href={site.studioUrl} rel="nofollow" className="transition-colors hover:text-cream">
+              {site.name}
+            </a>
           </span>
+          <a href={site.developer.url} target="_blank" className="text-cream/45 transition-colors hover:text-cream">
+            Developed by {site.developer.name}
+          </a>
         </p>
       </div>
     </section>

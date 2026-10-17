@@ -16,6 +16,9 @@ export default function SiteFooter() {
           © {new Date().getFullYear()} {site.name}
         </p>
         <p>{site.location}</p>
+        <a href={site.developer.url} target="_blank" className="transition-colors hover:text-ink">
+          Developed by {site.developer.name}
+        </a>
       </div>
     </footer>
   );

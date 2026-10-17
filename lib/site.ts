@@ -11,6 +11,10 @@ export const site = {
   email: "hello@nataliephoto.com",
   // TODO: Instagram handle without "@"; leave empty to hide it
   instagram: "",
+  // Sanity Studio (the admin panel). Linked from the name in the home page copyright line.
+  studioUrl: "https://nataliephoto.sanity.studio/",
+  // "Developed by" credit at the bottom of every page
+  developer: { name: "reactdev101.com", url: "https://reactdev101.com" },
 };
 
 // Client names or logos for the "Selected clients" strip.
