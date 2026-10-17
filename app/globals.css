@@ -24,6 +24,22 @@
   --color-plum-tint: #EDE6EA;
 }
 
+/* Red light on the hero photo: dim most of the time, two quick blinks every 5 seconds */
+@theme {
+  --animate-flash-blink: flash-blink 5s ease-in-out infinite;
+
+  @keyframes flash-blink {
+    0%, 82%, 87%, 100% {
+      opacity: 0.35;
+      box-shadow: 0 0 4px 1px rgb(255 40 40 / 0.35);
+    }
+    84%, 89% {
+      opacity: 1;
+      box-shadow: 0 0 8px 3px rgb(255 50 50 / 0.9), 0 0 22px 8px rgb(255 0 0 / 0.45);
+    }
+  }
+}
+
 /* Fonts loaded in layout.tsx via next/font → classes font-serif, font-sans */
 @theme inline {
   --font-serif: var(--font-cormorant), Georgia, serif;

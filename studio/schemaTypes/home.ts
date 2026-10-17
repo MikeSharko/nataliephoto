@@ -16,6 +16,19 @@ export const home = defineType({
       initialValue: 40,
       validation: (rule) => rule.min(0).max(90).integer(),
     }),
+    defineField({
+      name: "flashLight",
+      title: "Blinking red light",
+      type: "object",
+      description:
+        "Optional: a small red light that blinks on the hero photo, like a flash that is ready to fire. " +
+        "Position in % of the photo: X from the left edge, Y from the top. Leave empty to hide it.",
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        defineField({ name: "x", title: "X (%)", type: "number", validation: (rule) => rule.min(0).max(100) }),
+        defineField({ name: "y", title: "Y (%)", type: "number", validation: (rule) => rule.min(0).max(100) }),
+      ],
+    }),
     imageWithAlt("portrait", "Your portrait", "Shown in the About section and next to blog posts."),
   ],
   preview: {

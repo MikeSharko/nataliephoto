@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Logo from "@/components/layout/Logo";
 import { cn } from "@/lib/cn";
 import { categories } from "@/lib/portfolio";
-import { site } from "@/lib/site";
 
 const portfolioLinks = [
   { href: "/portfolio/", label: "All work" },
@@ -81,8 +81,8 @@ export default function SiteNav() {
       )}
     >
       <nav aria-label="Main" className="flex items-center justify-between gap-6 px-gutter py-6 md:py-7">
-        <Link href="/" onClick={closeMenus} className="font-serif text-[26px] tracking-[0.04em] uppercase">
-          {site.name}
+        <Link href="/" onClick={closeMenus} className="transition-opacity hover:opacity-80">
+          <Logo />
         </Link>
 
         {/* Desktop menu */}

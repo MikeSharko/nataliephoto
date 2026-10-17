@@ -232,10 +232,16 @@ const heroPlaceholder = photo("food", "Overhead table scene", 1050, 2400);
 const portraitPlaceholder = photo("people", "Portrait of Natalie", 1600);
 
 const getHome = cache(async () =>
-  client.fetch<{ hero: SanityImage | null; heroDarkness: number | null; portrait: SanityImage | null } | null>(
+  client.fetch<{
+    hero: SanityImage | null;
+    heroDarkness: number | null;
+    flashLight: { x?: number; y?: number } | null;
+    portrait: SanityImage | null;
+  } | null>(
     `*[_id == "home"][0]{
       "hero": heroImage{ ${imageFields} },
       heroDarkness,
+      flashLight,
       "portrait": portrait{ ${imageFields} }
     }`,
   ),
@@ -251,6 +257,13 @@ export async function getHeroPhoto(): Promise<Photo> {
 export async function getHeroDarkness(): Promise<number> {
   const home = await getHome();
   return Math.min(90, Math.max(0, home?.heroDarkness ?? 40));
+}
+
+// Blinking red light on the hero photo (position in % of the photo), or undefined when not set
+export async function getHeroFlashLight(): Promise<{ x: number; y: number } | undefined> {
+  const light = (await getHome())?.flashLight;
+  if (typeof light?.x !== "number" || typeof light?.y !== "number") return undefined;
+  return { x: light.x, y: light.y };
 }
 
 export async function getPortraitPhoto(): Promise<Photo> {
