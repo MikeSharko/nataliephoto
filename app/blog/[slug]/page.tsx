@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Photo from "@/components/ui/Photo";
 import { getPostCategory } from "@/lib/blog";
 import { getPost, getPosts, getRelatedPosts } from "@/lib/posts";
+import { absoluteUrl, breadcrumbs, businessId, personId, socialImage } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -29,16 +30,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(slug);
   if (!post) return {};
 
+  const image = socialImage(post.cover); // cover photo as the link preview
+
   return {
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.slug}/` },
     openGraph: {
       type: "article",
+      siteName: `${site.name} Photography`,
+      locale: "en_US",
       title: post.title,
       description: post.excerpt,
       url: `/blog/${post.slug}/`,
       publishedTime: post.date,
+      ...(image && { images: [image] }),
     },
   };
 }
@@ -54,12 +60,23 @@ export default async function PostPage({ params }: Props) {
   // Structured data: tells Google this page is an article and who wrote it
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.excerpt,
-    ...(post.date && { datePublished: post.date }),
-    author: { "@type": "Person", name: site.name, url: site.url },
-    mainEntityOfPage: `${site.url}/blog/${post.slug}/`,
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: post.title,
+        description: post.excerpt,
+        ...(post.date && { datePublished: post.date }),
+        ...(post.cover.src && { image: post.cover.src }),
+        author: { "@type": "Person", "@id": personId, name: site.name, url: absoluteUrl("/contact/") },
+        publisher: { "@id": businessId },
+        mainEntityOfPage: absoluteUrl(`/blog/${post.slug}/`),
+      },
+      breadcrumbs([
+        { name: "Home", path: "/" },
+        { name: "Blog", path: "/blog/" },
+        { name: post.title, path: `/blog/${post.slug}/` },
+      ]),
+    ],
   };
 
   return (

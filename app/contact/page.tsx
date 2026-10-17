@@ -3,7 +3,7 @@ import AboutTeaser from "@/components/home/AboutTeaser";
 import ContactSection from "@/components/home/ContactSection";
 
 export const metadata: Metadata = {
-  title: "About & Contact",
+  title: "About Natalie & Contact",
   description: "About Natalie, a food, product and portrait photographer in San Diego, and how to book a shoot.",
   alternates: { canonical: "/contact/" },
 };

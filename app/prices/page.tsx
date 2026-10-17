@@ -5,7 +5,7 @@ import CtaSection from "@/components/sections/CtaSection";
 import PageIntro from "@/components/sections/PageIntro";
 
 export const metadata: Metadata = {
-  title: "Prices",
+  title: "Photography Prices & Packages",
   description: "Photography packages and prices for restaurants, cafes and product brands in San Diego.",
   alternates: { canonical: "/prices/" },
 };
@@ -17,6 +17,7 @@ export default function PricesPage() {
       <PageIntro
         eyebrow={<p className="eyebrow text-subtle">Prices</p>}
         title="Prices"
+        titleSuffix="for food, product and people photography in San Diego"
         subtitle="Packages for food, product and people shoots."
         description="Every shoot is a little different. Pick the closest package and I will tailor it to your project."
       />

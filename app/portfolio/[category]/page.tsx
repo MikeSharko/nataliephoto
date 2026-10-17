@@ -6,9 +6,12 @@ import MasonryGallery from "@/components/portfolio/MasonryGallery";
 import WhatIShoot from "@/components/portfolio/WhatIShoot";
 import CtaSection from "@/components/sections/CtaSection";
 import PageIntro from "@/components/sections/PageIntro";
+import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { accents } from "@/lib/accents";
 import { categories, getCategory, getCategoryPhotos } from "@/lib/portfolio";
+import { absoluteUrl, breadcrumbs, businessId, socialImage } from "@/lib/seo";
+import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ category: string }> };
 
@@ -26,10 +29,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = getCategory(slug);
   if (!category) return {};
 
+  // Link preview: the first photo of the gallery (falls back to the site-wide image)
+  const [cover] = await getCategoryPhotos(category.slug);
+  const image = socialImage(cover);
+
   return {
-    title: `${category.title} Photography`,
+    title: `${category.title} Photography in San Diego`,
     description: category.metaDescription,
     alternates: { canonical: `/portfolio/${category.slug}/` },
+    ...(image && { openGraph: { images: [image], url: `/portfolio/${category.slug}/` } }),
   };
 }
 
@@ -40,8 +48,30 @@ export default async function CategoryPage({ params }: Props) {
 
   const photos = await getCategoryPhotos(category.slug);
 
+  // For Google: breadcrumbs + this page is a gallery of Natalie's photos (helps Google Images)
+  const jsonLd = {
+    "@graph": [
+      breadcrumbs([
+        { name: "Home", path: "/" },
+        { name: "Portfolio", path: "/portfolio/" },
+        { name: category.title, path: `/portfolio/${category.slug}/` },
+      ]),
+      {
+        "@type": "ImageGallery",
+        name: `${category.title} photography by ${site.name}`,
+        description: category.metaDescription,
+        url: absoluteUrl(`/portfolio/${category.slug}/`),
+        author: { "@id": businessId },
+        image: photos
+          .filter((photo) => photo.src)
+          .map((photo) => ({ "@type": "ImageObject", contentUrl: photo.src, description: photo.alt || undefined })),
+      },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={jsonLd} />
       <PageIntro
         eyebrow={
           <Breadcrumbs
@@ -52,6 +82,7 @@ export default async function CategoryPage({ params }: Props) {
           />
         }
         title={category.navLabel}
+        titleSuffix="photography in San Diego"
         subtitle={category.headline}
         description={category.intro}
       >

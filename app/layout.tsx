@@ -21,7 +21,11 @@ export const metadata: Metadata = {
     type: "website",
     siteName: `${site.name} Photography`,
     locale: "en_US",
+    url: "/",
   },
+  // Big image card when the link is shared on X/Twitter (others use openGraph)
+  twitter: { card: "summary_large_image" },
+  // The preview image itself is app/opengraph-image.jpg (Next.js picks it up by its file name)
 };
 
 export default function RootLayout({
